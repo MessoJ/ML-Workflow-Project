@@ -8,7 +8,7 @@
         "OutputPath": "$.Payload",
         "Parameters": {
           "Payload.$": "$",
-          "FunctionName": "arn:aws:lambda:us-east-1:699475949286:function:serializeImageData:$LATEST"
+          "FunctionName": "arn:aws:lambda:us-east-1:116981771480:function:serializeImageData:$LATEST"
         },
         "Retry": [
           {
@@ -31,7 +31,7 @@
         "OutputPath": "$.Payload",
         "Parameters": {
           "Payload.$": "$",
-          "FunctionName": "arn:aws:lambda:us-east-1:699475949286:function:imageClassifier:$LATEST"
+          "FunctionName": "arn:aws:lambda:us-east-1:116981771480:function:imageClassifier:$LATEST"
         },
         "Retry": [
           {
@@ -54,7 +54,7 @@
         "OutputPath": "$.Payload",
         "Parameters": {
           "Payload.$": "$",
-          "FunctionName": "arn:aws:lambda:us-east-1:699475949286:function:inferenceConfidenceFilter:$LATEST"
+          "FunctionName": "arn:aws:lambda:us-east-1:116981771480:function:inferenceConfidenceFilter:$LATEST"
         },
         "Retry": [
           {
