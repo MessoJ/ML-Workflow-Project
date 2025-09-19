@@ -1,0 +1,27 @@
+{
+    "Comment": "Scones Unlimited - image classification workflow",
+    "StartAt": "PreprocessImage",
+    "States": {
+      "PreprocessImage": {
+        "Type": "Task",
+        "Resource": "arn:aws:lambda:us-east-1:116981771480:function:preprocessImage",
+        "ResultPath": "$",
+        "OutputPath": "$.body",
+        "Next": "ClassifyImage"
+      },
+      "ClassifyImage": {
+        "Type": "Task",
+        "Resource": "arn:aws:lambda:us-east-1:116981771480:function:classifyImage",
+        "ResultPath": "$",
+        "OutputPath": "$.body",
+        "Next": "FilterResults"
+      },
+      "FilterResults": {
+        "Type": "Task",
+        "Resource": "arn:aws:lambda:us-east-1:116981771480:function:filterResults",
+        "ResultPath": "$",
+        "OutputPath": "$.body",
+        "End": true
+      }
+    }
+  }
