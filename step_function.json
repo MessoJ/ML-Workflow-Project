@@ -1,26 +1,74 @@
 {
-    "Comment": "Scones Unlimited - image classification workflow",
-    "StartAt": "PreprocessImage",
+    "Comment": "A description of my state machine",
+    "StartAt": "Lambda Invoke (serializeImageData)",
     "States": {
-      "PreprocessImage": {
+      "Lambda Invoke (serializeImageData)": {
         "Type": "Task",
-        "Resource": "arn:aws:lambda:us-east-1:116981771480:function:preprocessImage",
-        "ResultPath": "$",
-        "OutputPath": "$.body",
-        "Next": "ClassifyImage"
+        "Resource": "arn:aws:states:::lambda:invoke",
+        "OutputPath": "$.Payload",
+        "Parameters": {
+          "Payload.$": "$",
+          "FunctionName": "arn:aws:lambda:us-east-1:124237938946:function:serializeImageData:$LATEST"
+        },
+        "Retry": [
+          {
+            "ErrorEquals": [
+              "Lambda.ServiceException",
+              "Lambda.AWSLambdaException",
+              "Lambda.SdkClientException",
+              "Lambda.TooManyRequestsException"
+            ],
+            "IntervalSeconds": 1,
+            "MaxAttempts": 3,
+            "BackoffRate": 2
+          }
+        ],
+        "Next": "Lambda Invoke (imageClassifier)"
       },
-      "ClassifyImage": {
+      "Lambda Invoke (imageClassifier)": {
         "Type": "Task",
-        "Resource": "arn:aws:lambda:us-east-1:116981771480:function:classifyImage",
-        "ResultPath": "$",
-        "OutputPath": "$.body",
-        "Next": "FilterResults"
+        "Resource": "arn:aws:states:::lambda:invoke",
+        "OutputPath": "$.Payload",
+        "Parameters": {
+          "Payload.$": "$",
+          "FunctionName": "arn:aws:lambda:us-east-1:124237938946:function:imageClassifier:$LATEST"
+        },
+        "Retry": [
+          {
+            "ErrorEquals": [
+              "Lambda.ServiceException",
+              "Lambda.AWSLambdaException",
+              "Lambda.SdkClientException",
+              "Lambda.TooManyRequestsException"
+            ],
+            "IntervalSeconds": 1,
+            "MaxAttempts": 3,
+            "BackoffRate": 2
+          }
+        ],
+        "Next": "Lambda Invoke (inferenceConfidenceFilter)"
       },
-      "FilterResults": {
+      "Lambda Invoke (inferenceConfidenceFilter)": {
         "Type": "Task",
-        "Resource": "arn:aws:lambda:us-east-1:116981771480:function:filterResults",
-        "ResultPath": "$",
-        "OutputPath": "$.body",
+        "Resource": "arn:aws:states:::lambda:invoke",
+        "OutputPath": "$.Payload",
+        "Parameters": {
+          "Payload.$": "$",
+          "FunctionName": "arn:aws:lambda:us-east-1:124237938946:function:inferenceConfidenceFilter:$LATEST"
+        },
+        "Retry": [
+          {
+            "ErrorEquals": [
+              "Lambda.ServiceException",
+              "Lambda.AWSLambdaException",
+              "Lambda.SdkClientException",
+              "Lambda.TooManyRequestsException"
+            ],
+            "IntervalSeconds": 1,
+            "MaxAttempts": 3,
+            "BackoffRate": 2
+          }
+        ],
         "End": true
       }
     }
